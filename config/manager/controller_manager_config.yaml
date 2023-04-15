@@ -1,0 +1,11 @@
+apiVersion: nautes.resource.nautes.io/v1alpha1
+kind: BaseOperatorConfig
+health:
+  healthProbeBindAddress: :8089
+metrics:
+  bindAddress: 127.0.0.1:8088
+webhook:
+  port: 9443
+leaderElection:
+  leaderElect: false
+  resourceName: 0afe6787.resource.nautes.io

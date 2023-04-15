@@ -1,0 +1,7 @@
+apiVersion: nautes.resource.nautes.io/v1alpha1
+kind: Product
+metadata:
+  name: product-sample
+spec:
+  name: "new-product"
+  # TODO(user): Add fields here

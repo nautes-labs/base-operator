@@ -1,0 +1,8 @@
+apiVersion: nautes.resource.nautes.io/v1alpha1
+kind: ArtifactRepoProvider
+metadata:
+  name: nexus1
+spec:
+  url: http://nexus.bluzin.io:8081
+  apiserver: http://nexus.bluzin.io:8081
+  providertype: nexus

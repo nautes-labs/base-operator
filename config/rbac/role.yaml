@@ -1,0 +1,179 @@
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  creationTimestamp: null
+  name: manager-role
+rules:
+- apiGroups:
+  - ""
+  resources:
+  - namespaces
+  verbs:
+  - create
+  - delete
+  - get
+  - list
+  - patch
+  - update
+  - watch
+- apiGroups:
+  - argoproj.io
+  resources:
+  - applications
+  verbs:
+  - create
+  - delete
+  - get
+  - list
+  - patch
+  - update
+  - watch
+- apiGroups:
+  - argoproj.io
+  resources:
+  - appprojects
+  verbs:
+  - create
+  - get
+  - patch
+  - update
+- apiGroups:
+  - nautes.resource.nautes.io
+  resources:
+  - artifactrepoproviders
+  verbs:
+  - create
+  - delete
+  - get
+  - list
+  - patch
+  - update
+  - watch
+- apiGroups:
+  - nautes.resource.nautes.io
+  resources:
+  - artifactrepoproviders/finalizers
+  verbs:
+  - update
+- apiGroups:
+  - nautes.resource.nautes.io
+  resources:
+  - artifactrepoproviders/status
+  verbs:
+  - get
+  - patch
+  - update
+- apiGroups:
+  - nautes.resource.nautes.io
+  resources:
+  - basedatasyncconfigs
+  verbs:
+  - create
+  - delete
+  - get
+  - list
+  - patch
+  - update
+  - watch
+- apiGroups:
+  - nautes.resource.nautes.io
+  resources:
+  - basedatasyncconfigs/finalizers
+  verbs:
+  - update
+- apiGroups:
+  - nautes.resource.nautes.io
+  resources:
+  - basedatasyncconfigs/status
+  verbs:
+  - get
+  - patch
+  - update
+- apiGroups:
+  - nautes.resource.nautes.io
+  resources:
+  - coderepoes
+  verbs:
+  - create
+  - get
+  - list
+  - update
+- apiGroups:
+  - nautes.resource.nautes.io
+  resources:
+  - coderepoproviders
+  verbs:
+  - create
+  - delete
+  - get
+  - list
+  - patch
+  - update
+  - watch
+- apiGroups:
+  - nautes.resource.nautes.io
+  resources:
+  - coderepoproviders/finalizers
+  verbs:
+  - update
+- apiGroups:
+  - nautes.resource.nautes.io
+  resources:
+  - coderepoproviders/status
+  verbs:
+  - get
+  - patch
+  - update
+- apiGroups:
+  - nautes.resource.nautes.io
+  resources:
+  - productproviders
+  verbs:
+  - create
+  - delete
+  - get
+  - list
+  - patch
+  - update
+  - watch
+- apiGroups:
+  - nautes.resource.nautes.io
+  resources:
+  - productproviders/finalizers
+  verbs:
+  - update
+- apiGroups:
+  - nautes.resource.nautes.io
+  resources:
+  - productproviders/status
+  verbs:
+  - get
+  - patch
+  - update
+- apiGroups:
+  - nautes.resource.nautes.io
+  resources:
+  - products
+  verbs:
+  - create
+  - delete
+  - get
+  - list
+  - patch
+  - update
+  - watch
+- apiGroups:
+  - nautes.resource.nautes.io
+  resources:
+  - products/finalizers
+  verbs:
+  - update
+- apiGroups:
+  - nautes.resource.nautes.io
+  resources:
+  - products/status
+  verbs:
+  - get
+  - patch
+  - update

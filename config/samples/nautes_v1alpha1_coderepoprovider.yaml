@@ -1,0 +1,8 @@
+apiVersion: nautes.resource.nautes.io/v1alpha1
+kind: CodeRepoProvider
+metadata:
+  name: gitlab1
+spec:
+  url: https://github.com
+  apiserver: https://github.com/api/v4
+  providertype: gitlab

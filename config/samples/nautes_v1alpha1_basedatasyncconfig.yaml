@@ -1,0 +1,28 @@
+apiVersion: nautes.resource.nautes.io/v1alpha1
+kind: BaseDataSyncConfig
+metadata:
+  name: basedatasyncconfig-sample
+spec:
+  source:
+    # applicationSpec:
+    #   name: gitlab1
+    #   apiServerUrl: https://github.com/api/v4
+    #   providerType: gitlab
+    applicationRef:
+      name: gitlab1
+      namespace: default
+      group: nautes.resource.nautes.io
+      version: v1alpha1
+      kind: CodeRepoProvider
+  targets:
+    # - applicationSpec:
+    #     name: nexus1
+    #     apiServerUrl: http://nexus.bluzin.io:8081
+    #     providerType: nexus
+      - applicationRef:
+          name: nexus1
+          namespace: default
+          group: nautes.resource.nautes.io
+          version: v1alpha1
+          kind: ArtifactRepoProvider
+

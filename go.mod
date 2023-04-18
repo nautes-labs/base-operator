@@ -3,7 +3,7 @@ module github.com/nautes-labs/base-operator
 go 1.17
 
 require (
-	github.com/nautes-labs/pkg v0.2.0
+	github.com/nautes-labs/pkg v0.2.1
 	github.com/onsi/gomega v1.22.0
 	k8s.io/apimachinery v0.23.3
 	k8s.io/client-go v0.23.3

@@ -27,40 +27,37 @@ import (
 	"sigs.k8s.io/controller-runtime/pkg/client"
 )
 
-var GitProviders = map[string]NewProvider{}
-
-type NewProvider func(token, url string, cfg nautescfg.Config) (baseinterface.ProductProvider, error)
-
 func init() {
-	GitProviders["gitlab"] = gitlab.NewProvider
+	ProductProviderCodeRepoFactory["gitlab"] = gitlab.NewProvider
 }
 
-type CodeRepoProvider struct {
-	Provider map[string]NewProvider
+type NewProductProviderCoderRepo func(token string, codeRepoProvider nautescrd.CodeRepoProvider, cfg nautescfg.Config) (baseinterface.ProductProvider, error)
+
+var ProductProviderCodeRepoFactory = map[string]NewProductProviderCoderRepo{}
+
+// ProductProviderCodeRepo is used to generate the coderepo type of product provider.
+type ProductProviderCodeRepo struct {
+	ProviderFactory map[string]NewProductProviderCoderRepo
 }
 
-func NewCodeRepoProvider() *CodeRepoProvider {
-	return &CodeRepoProvider{
-		Provider: GitProviders,
+func NewProductProviderCodeRepo() *ProductProviderCodeRepo {
+	return &ProductProviderCodeRepo{
+		ProviderFactory: ProductProviderCodeRepoFactory,
 	}
 }
 
-func (p *CodeRepoProvider) GetProvider(ctx context.Context,
-	name string,
-	k8s client.Client,
-	cfg nautescfg.Config,
-) (baseinterface.ProductProvider, error) {
+func (p *ProductProviderCodeRepo) GetProvider(ctx context.Context, codeRepoProviderName string, k8sClient client.Client, cfg nautescfg.Config) (baseinterface.ProductProvider, error) {
 	provider := &nautescrd.CodeRepoProvider{}
 	key := types.NamespacedName{
 		Namespace: cfg.Nautes.Namespace,
-		Name:      name,
+		Name:      codeRepoProviderName,
 	}
-	err := k8s.Get(ctx, key, provider)
+	err := k8sClient.Get(ctx, key, provider)
 	if err != nil {
 		return nil, fmt.Errorf("get code repo provider failed: %w", err)
 
 	}
-	NewProvider, ok := p.Provider[provider.Spec.ProviderType]
+	NewProvider, ok := p.ProviderFactory[provider.Spec.ProviderType]
 	if !ok {
 		return nil, fmt.Errorf("unknow code repo provider type")
 	}
@@ -76,7 +73,7 @@ func (p *CodeRepoProvider) GetProvider(ctx context.Context,
 		return nil, fmt.Errorf("get root token failed: %w", err)
 	}
 
-	productProvider, err := NewProvider(token, provider.Spec.ApiServer, cfg)
+	productProvider, err := NewProvider(token, *provider, cfg)
 	if err != nil {
 		return nil, fmt.Errorf("get %s failed: %w", provider.Spec.ProviderType, err)
 	}

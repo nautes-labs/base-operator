@@ -35,16 +35,17 @@ const (
 )
 
 type GitLab struct {
-	gitlab.Client
+	*gitlab.Client
 	DefaultProjectName string
+	provider           baseinterface.CodeRepoProvider
 }
 
-func NewProvider(token, url string, cfg nautescfg.Config) (baseinterface.ProductProvider, error) {
-	return NewGitlab(token, url, cfg)
+func NewProvider(token string, codeRepoProvider nautescrd.CodeRepoProvider, cfg nautescfg.Config) (baseinterface.ProductProvider, error) {
+	return NewGitlab(token, codeRepoProvider, cfg)
 }
 
-func NewGitlab(token, url string, cfg nautescfg.Config) (*GitLab, error) {
-	apiURL := fmt.Sprintf("%s/api/v4", url)
+func NewGitlab(token string, codeRepoProvider nautescrd.CodeRepoProvider, cfg nautescfg.Config) (*GitLab, error) {
+	apiURL := fmt.Sprintf("%s/api/v4", codeRepoProvider.Spec.ApiServer)
 	opts := []gitlab.ClientOptionFunc{
 		gitlab.WithBaseURL(apiURL),
 	}
@@ -59,9 +60,13 @@ func NewGitlab(token, url string, cfg nautescfg.Config) (*GitLab, error) {
 	if err != nil {
 		return nil, fmt.Errorf("failed to get gitlab client: %w", err)
 	}
+
 	return &GitLab{
-		Client:             *client,
+		Client:             client,
 		DefaultProjectName: cfg.Git.DefaultProductName,
+		provider: baseinterface.CodeRepoProvider{
+			Name: codeRepoProvider.Name,
+		},
 	}, nil
 }
 
@@ -141,10 +146,12 @@ func (g *GitLab) GetProducts() ([]nautescrd.Product, error) {
 	return newProducts, nil
 }
 
-func (g *GitLab) GetProductMeta(cotx context.Context, ID string) (*baseinterface.ProductMeta, error) {
+func (g *GitLab) GetProductMeta(ctx context.Context, ID string) (baseinterface.ProductMeta, error) {
+	productMeta := baseinterface.ProductMeta{}
+
 	group, resp, err := g.Groups.GetGroup(ID, nil)
 	if err != nil {
-		return nil, fmt.Errorf("get group info failed. code %d: %w", resp.Response.StatusCode, err)
+		return productMeta, fmt.Errorf("get group info failed. code %d: %w", resp.Response.StatusCode, err)
 	}
 
 	nameWithNamespace := fmt.Sprintf("%s/%s", group.Path, g.DefaultProjectName)
@@ -154,15 +161,19 @@ func (g *GitLab) GetProductMeta(cotx context.Context, ID string) (*baseinterface
 		Search:           &nameWithNamespace,
 	})
 	if err != nil {
-		return nil, fmt.Errorf("get meta data failed, code %d: %w", resp.Response.StatusCode, err)
+		return productMeta, fmt.Errorf("get meta data failed, code %d: %w", resp.Response.StatusCode, err)
 
 	}
 	if len(projects) != 1 {
-		return nil, fmt.Errorf("meta data is nil or more than one.")
+		return productMeta, fmt.Errorf("meta data is nil or more than one")
 	}
 
-	return &baseinterface.ProductMeta{
+	return baseinterface.ProductMeta{
 		ID:     ID,
 		MetaID: fmt.Sprintf("%d", projects[0].ID),
 	}, nil
+}
+
+func (g *GitLab) GetCodeRepoProvider(ctx context.Context) (baseinterface.CodeRepoProvider, error) {
+	return g.provider, nil
 }

@@ -37,13 +37,18 @@ func (p *MockProductProviderFactory) GetProvider(ctx context.Context,
 
 type MockProductProvider struct {
 	ProductList []nautescrd.Product
-	ProductMeta *baseinterface.ProductMeta
+	ProductMeta baseinterface.ProductMeta
+	Provider    baseinterface.CodeRepoProvider
 }
 
 func (p *MockProductProvider) GetProducts() ([]nautescrd.Product, error) {
 	return p.ProductList, nil
 }
 
-func (p *MockProductProvider) GetProductMeta(ctx context.Context, ID string) (*baseinterface.ProductMeta, error) {
+func (p *MockProductProvider) GetProductMeta(ctx context.Context, ID string) (baseinterface.ProductMeta, error) {
 	return p.ProductMeta, nil
+}
+
+func (p *MockProductProvider) GetCodeRepoProvider(ctx context.Context) (baseinterface.CodeRepoProvider, error) {
+	return p.Provider, nil
 }

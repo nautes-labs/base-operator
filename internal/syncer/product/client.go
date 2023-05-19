@@ -25,6 +25,8 @@ import (
 	nautescrd "github.com/nautes-labs/pkg/api/v1alpha1"
 	nautescfg "github.com/nautes-labs/pkg/pkg/nautesconfigs"
 
+	baseinterface "github.com/nautes-labs/base-operator/pkg/interface"
+	"github.com/nautes-labs/base-operator/pkg/util"
 	nautesctx "github.com/nautes-labs/pkg/pkg/context"
 	corev1 "k8s.io/api/core/v1"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
@@ -113,8 +115,12 @@ func (s *ProductSyncer) Sync(ctx context.Context, product nautescrd.Product) err
 	if err != nil {
 		return fmt.Errorf("get product metadata failed: %w", err)
 	}
+	codeRepoProvider, err := productProvider.GetCodeRepoProvider(ctx)
+	if err != nil {
+		return err
+	}
 	coderepoName := fmt.Sprintf(RESOURCE_NAME_CODE_REPO, productMeta.MetaID)
-	err = s.syncCoderepo(ctx, coderepoName, product, label)
+	err = s.syncCoderepo(ctx, coderepoName, product, codeRepoProvider, label)
 	if err != nil {
 		return fmt.Errorf("sync coderepo failed: %w", err)
 	}
@@ -317,53 +323,32 @@ func (s *ProductSyncer) deleteArgoApp(ctx context.Context, label map[string]stri
 	return fmt.Errorf("wait timeout exceeded")
 }
 
-func (s *ProductSyncer) syncCoderepo(ctx context.Context, name string, product nautescrd.Product, label map[string]string) error {
+func (s *ProductSyncer) syncCoderepo(ctx context.Context, name string, product nautescrd.Product, provider baseinterface.CodeRepoProvider, label map[string]string) error {
 	cfg, err := FromConfigContext(ctx)
 	if err != nil {
 		return err
 	}
 
-	coderepos := &nautescrd.CodeRepoList{}
-	listOpts := []client.ListOption{
-		client.MatchingLabels(label),
-		client.InNamespace(product.Namespace),
-	}
-	err = s.client.List(ctx, coderepos, listOpts...)
-	if err != nil {
-		return fmt.Errorf("get code repo failed: %w", err)
+	codeRepo := &nautescrd.CodeRepo{
+		ObjectMeta: metav1.ObjectMeta{
+			Name:      name,
+			Namespace: cfg.Nautes.Namespace,
+			Labels:    label,
+		},
 	}
 
-	switch num := len(coderepos.Items); num {
-	case 0:
-		coderepo := &nautescrd.CodeRepo{
-			ObjectMeta: metav1.ObjectMeta{
-				Name:      name,
-				Namespace: cfg.Nautes.Namespace,
-				Labels:    label,
-			},
-			Spec: nautescrd.CodeRepoSpec{
-				Product:  product.Name,
-				RepoName: cfg.Git.DefaultProductName,
-				URL:      product.Spec.MetaDataPath,
-			},
+	_, err = controllerutil.CreateOrUpdate(ctx, s.client, codeRepo, func() error {
+		if err := util.IsLegal(codeRepo, product.Name); err != nil {
+			return err
 		}
-		controllerutil.SetControllerReference(&product, coderepo, scheme.Scheme)
-		return s.client.Create(ctx, coderepo)
-	case 1:
-		coderepo := coderepos.Items[0]
-		if coderepo.Spec.URL == product.Spec.MetaDataPath &&
-			coderepo.Spec.Product == product.Name &&
-			coderepo.Spec.RepoName == cfg.Git.DefaultProductName {
-			return nil
-		}
-		coderepo.Spec.Product = product.Name
-		coderepo.Spec.RepoName = cfg.Git.DefaultProductName
-		coderepo.Spec.URL = product.Spec.MetaDataPath
-		return s.client.Update(ctx, &coderepo)
 
-	default:
-		return fmt.Errorf("too many code repo")
-	}
+		codeRepo.Spec.CodeRepoProvider = provider.Name
+		codeRepo.Spec.Product = product.Name
+		codeRepo.Spec.RepoName = cfg.Git.DefaultProductName
+		codeRepo.Spec.URL = product.Spec.MetaDataPath
+		return nil
+	})
+	return err
 }
 
 func (s *ProductSyncer) syncNamespace(ctx context.Context, name string, label map[string]string) error {

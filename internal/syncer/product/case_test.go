@@ -52,7 +52,7 @@ var _ = Describe("K8S syncer", func() {
 			},
 		}
 		productprovider.MockProvider = &productprovider.MockProductProvider{
-			ProductMeta: &baseinterface.ProductMeta{
+			ProductMeta: baseinterface.ProductMeta{
 				ID:     productID,
 				MetaID: repoID,
 			},

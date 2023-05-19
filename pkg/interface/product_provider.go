@@ -25,12 +25,22 @@ type ProductProviderSyncer interface {
 	Sync(context.Context, nautescrd.ProductProvider) error
 }
 
+// ProductProvider is an object used to obtain product information from the product database
 type ProductProvider interface {
 	GetProducts() ([]nautescrd.Product, error)
-	GetProductMeta(ctx context.Context, ID string) (*ProductMeta, error)
+	GetProductMeta(ctx context.Context, ID string) (ProductMeta, error)
+	GetCodeRepoProvider(ctx context.Context) (CodeRepoProvider, error)
 }
 
+// ProductMeta record product meta data
 type ProductMeta struct {
-	ID     string
+	// Product ID
+	ID string
+	// The ID of the git code repo that records product information
 	MetaID string
+}
+
+type CodeRepoProvider struct {
+	// Code repo provider name in tenant k8s
+	Name string
 }

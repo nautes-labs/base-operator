@@ -30,7 +30,7 @@ import (
 )
 
 func init() {
-	ProductProviders["coderepo"] = coderepoprovider.NewCodeRepoProvider()
+	ProductProviders["coderepo"] = coderepoprovider.NewProductProviderCodeRepo()
 }
 
 const (

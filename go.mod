@@ -3,7 +3,7 @@ module github.com/nautes-labs/base-operator
 go 1.17
 
 require (
-	github.com/nautes-labs/pkg v0.2.2-0.20230522024442-d35e30879cfe
+	github.com/nautes-labs/pkg v0.3.0
 	github.com/onsi/gomega v1.22.0
 	k8s.io/apimachinery v0.23.3
 	k8s.io/client-go v0.23.3
@@ -65,7 +65,6 @@ require (
 	github.com/go-git/gcfg v1.5.0 // indirect
 	github.com/go-git/go-billy/v5 v5.3.1 // indirect
 	github.com/go-git/go-git/v5 v5.4.2 // indirect
-	github.com/go-kratos/kratos/v2 v2.5.0 // indirect
 	github.com/go-logr/logr v1.2.3 // indirect
 	github.com/go-logr/zapr v1.2.3 // indirect
 	github.com/go-openapi/jsonpointer v0.19.5 // indirect
@@ -115,7 +114,6 @@ require (
 	github.com/modern-go/concurrent v0.0.0-20180306012644-bacd9c7ef1dd // indirect
 	github.com/modern-go/reflect2 v1.0.2 // indirect
 	github.com/monochromegane/go-gitignore v0.0.0-20200626010858-205db1a8cc00 // indirect
-	github.com/natefinch/lumberjack v0.0.0-20230119042236-215739b3bcdc // indirect
 	github.com/opencontainers/go-digest v1.0.0 // indirect
 	github.com/patrickmn/go-cache v2.1.0+incompatible // indirect
 	github.com/peterbourgon/diskv v2.0.1+incompatible // indirect

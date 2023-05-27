@@ -30,7 +30,7 @@ import (
 )
 
 type Vault struct {
-	vault.Client
+	*vault.Client
 }
 
 const (
@@ -87,7 +87,7 @@ func NewVault(cfg nautescfg.SecretRepo) (*Vault, error) {
 	if cfg.Vault.Token != "" {
 		client.SetToken(cfg.Vault.Token)
 		return &Vault{
-			Client: *client,
+			Client: client,
 		}, nil
 	}
 
@@ -110,6 +110,6 @@ func NewVault(cfg nautescfg.SecretRepo) (*Vault, error) {
 		return nil, fmt.Errorf("no auth info was returned after login")
 	}
 	return &Vault{
-		Client: *client,
+		Client: client,
 	}, nil
 }

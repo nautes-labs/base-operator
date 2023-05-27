@@ -43,7 +43,7 @@ func TestProvider(t *testing.T) {
 	RunSpecs(t, "Provider Suite")
 }
 
-var crProvider coderepoprovider.CodeRepoProvider
+var crProvider coderepoprovider.ProductProviderCodeRepo
 var cfg *rest.Config
 var k8sClient client.Client
 var testEnv *envtest.Environment
@@ -53,10 +53,10 @@ var _ = BeforeSuite(func() {
 	secretprovider.SecretProviders = map[string]secretprovider.NewClient{
 		"mock": newMockSecretProvider,
 	}
-	coderepoprovider.GitProviders = map[string]coderepoprovider.NewProvider{
+	coderepoprovider.ProductProviderCodeRepoFactory = map[string]coderepoprovider.NewProductProviderCoderRepo{
 		"gitlab": newMockProductProvider,
 	}
-	crProvider = *coderepoprovider.NewCodeRepoProvider()
+	crProvider = *coderepoprovider.NewProductProviderCodeRepo()
 
 	initK8S()
 
@@ -97,7 +97,7 @@ func initK8S() {
 
 type mockProductProvider struct{}
 
-func newMockProductProvider(token, url string, cfg nautescfg.Config) (baseinterface.ProductProvider, error) {
+func newMockProductProvider(token string, coderpeoProvider nautescrd.CodeRepoProvider, cfg nautescfg.Config) (baseinterface.ProductProvider, error) {
 	return &mockProductProvider{}, nil
 }
 
@@ -105,8 +105,12 @@ func (m *mockProductProvider) GetProducts() ([]nautescrd.Product, error) {
 	return []nautescrd.Product{}, nil
 }
 
-func (m *mockProductProvider) GetProductMeta(ctx context.Context, ID string) (*baseinterface.ProductMeta, error) {
-	return nil, nil
+func (m *mockProductProvider) GetProductMeta(ctx context.Context, ID string) (baseinterface.ProductMeta, error) {
+	return baseinterface.ProductMeta{}, nil
+}
+
+func (p *mockProductProvider) GetCodeRepoProvider(ctx context.Context) (baseinterface.CodeRepoProvider, error) {
+	return baseinterface.CodeRepoProvider{}, nil
 }
 
 type mockSecretClient struct{}

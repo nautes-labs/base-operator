@@ -2,7 +2,7 @@
 
 [![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://opensource.org/licenses/Apache-2.0)
 [![golang](https://img.shields.io/badge/golang-v1.17.13-brightgreen)](https://go.dev/doc/install)
-[![version](https://img.shields.io/badge/version-v0.3.0-green)]()
+[![version](https://img.shields.io/badge/version-v0.3.1-green)]()
 
 Base Operator 项目可以处理产品实体和权限实体从提供者到目标服务的同步。
 

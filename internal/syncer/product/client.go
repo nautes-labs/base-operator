@@ -342,6 +342,9 @@ func (s *ProductSyncer) syncCoderepo(ctx context.Context, name string, product n
 			return err
 		}
 
+		if err := controllerutil.SetControllerReference(&product, codeRepo, scheme.Scheme); err != nil {
+			return fmt.Errorf("set code repo owner failed. repo name %s: %w", codeRepo.Name, err)
+		}
 		codeRepo.Spec.CodeRepoProvider = provider.Name
 		codeRepo.Spec.Product = product.Name
 		codeRepo.Spec.RepoName = cfg.Git.DefaultProductName

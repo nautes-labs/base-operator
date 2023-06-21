@@ -28,7 +28,7 @@ const (
 	SyncProjectMemberConditionType ConditionType = "sync-project-member"
 )
 
-//+kubebuilder:object:generate=false
+// +kubebuilder:object:generate=false
 type ConditionType string
 
 func (c ConditionType) ToString() string {

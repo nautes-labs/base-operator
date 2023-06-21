@@ -1,8 +1,8 @@
 # Base Operator
 
 [![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://opensource.org/licenses/Apache-2.0)
-[![golang](https://img.shields.io/badge/golang-v1.17.13-brightgreen)](https://go.dev/doc/install)
-[![version](https://img.shields.io/badge/version-v0.3.1-green)]()
+[![golang](https://img.shields.io/badge/golang-v1.20.5-brightgreen)](https://go.dev/doc/install)
+[![version](https://img.shields.io/badge/version-v0.3.2-green)]()
 
 Base Operator 项目可以处理产品实体和权限实体从提供者到目标服务的同步。
 
@@ -40,7 +40,7 @@ Nautes 会为每个产品实体创建一个元数据代码库（默认名称为 
 ### 构建
 
 ```shell
-go mod tidy -go=1.16 && go mod tidy -go=1.17
+go mod tidy
 go build -o manager main.go
 ```
 
@@ -51,14 +51,6 @@ go build -o manager main.go
 ```
 
 ### 单元测试
-
-安装 Envtest
-
-```shell
-go install sigs.k8s.io/controller-runtime/tools/setup-envtest@latest
-setup-envtest use 1.21.x
-export KUBEBUILDER_ASSETS=$HOME/.local/share/kubebuilder-envtest/k8s/1.21.4-linux-amd64
-```
 
 安装 Vault
 
@@ -71,11 +63,11 @@ sudo mv vault /usr/local/bin/
 安装 Ginkgo
 
 ```shell
-go install github.com/onsi/ginkgo/v2/ginkgo@v2.3.1
+go install github.com/onsi/ginkgo/v2/ginkgo@v2.10.0
 ```
 
 执行单元测试
 
 ```shell
-ginkgo -r
+make test
 ```

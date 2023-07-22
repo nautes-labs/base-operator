@@ -539,6 +539,10 @@ github.com/nautes-labs/pkg v0.3.4-0.20230717085922-1e39d9a48a9a h1:8/yeljjNacCuq
 github.com/nautes-labs/pkg v0.3.4-0.20230717085922-1e39d9a48a9a/go.mod h1:u8Zni0Jy9uzjNv/PWQ6xGNFGQVAhECP7h2HPY9xi9Ks=
 github.com/nautes-labs/pkg v0.3.4-0.20230718062633-e91f11b0c25c h1:4KatuHlrKZYv0Hdvv+aX7fWOU1I6zqcio5hVWiwUtyo=
 github.com/nautes-labs/pkg v0.3.4-0.20230718062633-e91f11b0c25c/go.mod h1:u8Zni0Jy9uzjNv/PWQ6xGNFGQVAhECP7h2HPY9xi9Ks=
+github.com/nautes-labs/pkg v0.3.4-0.20230721110206-4db4cf213128 h1:SXtLjpVwmf2PIY6V2NKGuEZ3Zp4+rLABuzgP8jsnurY=
+github.com/nautes-labs/pkg v0.3.4-0.20230721110206-4db4cf213128/go.mod h1:u8Zni0Jy9uzjNv/PWQ6xGNFGQVAhECP7h2HPY9xi9Ks=
+github.com/nautes-labs/pkg v0.3.4-0.20230722084337-0379d5e24b33 h1:V809eppJvSeE5TnE+iI7/UoyMh2vcULX6aUahp+NwpE=
+github.com/nautes-labs/pkg v0.3.4-0.20230722084337-0379d5e24b33/go.mod h1:u8Zni0Jy9uzjNv/PWQ6xGNFGQVAhECP7h2HPY9xi9Ks=
 github.com/niemeyer/pretty v0.0.0-20200227124842-a10e7caefd8e/go.mod h1:zD1mROLANZcx1PVRCS0qkT7pwLkGfwJo4zjcN/Tysno=
 github.com/nxadm/tail v1.4.8 h1:nPr65rt6Y5JFSKQO7qToXr7pePgD6Gwiw05lkbyAQTE=
 github.com/nxadm/tail v1.4.8/go.mod h1:+ncqLTQzXmGhMZNUePPaPqPvBxHAIsmXswZKocGu+AU=

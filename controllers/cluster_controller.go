@@ -4,6 +4,7 @@ import (
 	"context"
 	"errors"
 	"fmt"
+	"time"
 
 	nautescrd "github.com/nautes-labs/pkg/api/v1alpha1"
 	nautescfg "github.com/nautes-labs/pkg/pkg/nautesconfigs"
@@ -88,7 +89,7 @@ func (r *ClusterReconciler) Reconcile(ctx context.Context, req ctrl.Request) (ct
 	}
 
 	logger.V(1).Info("Reconcile finished.")
-	return ctrl.Result{}, err
+	return ctrl.Result{RequeueAfter: time.Hour}, err
 }
 
 const (
@@ -214,14 +215,18 @@ func (r *productUpdater) setProductIDMap(ctx context.Context, cluster *nautescrd
 	logger := log.FromContext(ctx)
 	warnings = warningProducts{}
 
-	allowedProducts := map[string]bool{}
+	products := map[string]bool{}
 	for _, namespace := range cluster.Spec.ReservedNamespacesAllowedProducts {
 		for _, product := range namespace {
-			allowedProducts[product] = true
+			products[product] = true
 		}
 	}
 
-	for productName := range allowedProducts {
+	for product := range cluster.Spec.ProductAllowedClusterResources {
+		products[product] = true
+	}
+
+	for productName := range products {
 		var warningError ClusterUpdateError
 
 		productID, ok := cluster.Status.ProductIDMap[productName]
@@ -256,7 +261,7 @@ func (r *productUpdater) setProductIDMap(ctx context.Context, cluster *nautescrd
 	}
 
 	for productName := range cluster.Status.ProductIDMap {
-		if !allowedProducts[productName] {
+		if !products[productName] {
 			delete(cluster.Status.ProductIDMap, productName)
 			logger.V(1).Info("Remove product from product ID map.", "productName", productName)
 			isChanged = true

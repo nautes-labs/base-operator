@@ -16,7 +16,7 @@ require (
 	github.com/hashicorp/go-multierror v1.1.1
 	github.com/hashicorp/vault/api v1.9.2
 	github.com/hashicorp/vault/api/auth/kubernetes v0.4.1
-	github.com/nautes-labs/pkg v0.3.4-0.20230718062633-e91f11b0c25c
+	github.com/nautes-labs/pkg v0.3.4-0.20230722084337-0379d5e24b33
 	github.com/onsi/ginkgo/v2 v2.10.0
 	github.com/onsi/gomega v1.27.7
 	github.com/sirupsen/logrus v1.9.0

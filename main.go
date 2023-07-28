@@ -161,13 +161,6 @@ func main() {
 	// 	setupLog.Error(err, "unable to create controller", "controller", "BaseDataSyncConfig")
 	// 	os.Exit(1)
 	// }
-	// if err = (&controllers.CodeRepoProviderReconciler{
-	// 	Client: mgr.GetClient(),
-	// 	Scheme: mgr.GetScheme(),
-	// }).SetupWithManager(mgr); err != nil {
-	// 	setupLog.Error(err, "unable to create controller", "controller", "CodeRepoProvider")
-	// 	os.Exit(1)
-	// }
 	// if err = (&controllers.ArtifactRepoProviderReconciler{
 	// 	Client: mgr.GetClient(),
 	// 	Scheme: mgr.GetScheme(),
@@ -176,6 +169,13 @@ func main() {
 	// 	os.Exit(1)
 	// }
 
+	if err = (&controllers.ClusterReconciler{
+		Client: mgr.GetClient(),
+		Scheme: mgr.GetScheme(),
+	}).SetupWithManager(mgr); err != nil {
+		setupLog.Error(err, "unable to create controller", "controller", "Cluster")
+		os.Exit(1)
+	}
 	//+kubebuilder:scaffold:builder
 
 	if err := mgr.AddHealthzCheck("healthz", healthz.Ping); err != nil {

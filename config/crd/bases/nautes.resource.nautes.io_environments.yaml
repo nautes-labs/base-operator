@@ -5,20 +5,30 @@ metadata:
   annotations:
     controller-gen.kubebuilder.io/version: v0.11.3
   creationTimestamp: null
-  name: artifactrepoes.nautes.resource.nautes.io
+  name: environments.nautes.resource.nautes.io
 spec:
   group: nautes.resource.nautes.io
   names:
-    kind: ArtifactRepo
-    listKind: ArtifactRepoList
-    plural: artifactrepoes
-    singular: artifactrepo
+    kind: Environment
+    listKind: EnvironmentList
+    plural: environments
+    singular: environment
   scope: Namespaced
   versions:
-  - name: v1alpha1
+  - additionalPrinterColumns:
+    - jsonPath: .spec.product
+      name: PRODUCTRESOURCENAME
+      type: string
+    - jsonPath: .spec.cluster
+      name: CLUSTER
+      type: string
+    - jsonPath: .spec.envType
+      name: ENVTYPE
+      type: string
+    name: v1alpha1
     schema:
       openAPIV3Schema:
-        description: ArtifactRepo is the Schema for the artifactrepoes API
+        description: Environment is the Schema for the environments API
         properties:
           apiVersion:
             description: 'APIVersion defines the versioned schema of this representation
@@ -33,42 +43,21 @@ spec:
           metadata:
             type: object
           spec:
-            description: ArtifactRepoSpec defines the desired state of ArtifactRepo
+            description: EnvironmentSpec defines the desired state of Environment
             properties:
-              artifactRepoProvider:
+              cluster:
                 type: string
-              packageType:
-                description: maven, python, go...
-                enum:
-                - maven
-                - python
-                - go
+              envType:
                 type: string
               product:
                 type: string
-              projects:
-                items:
-                  type: string
-                nullable: true
-                type: array
-              repoName:
-                type: string
-              repoType:
-                description: remote, local, virtual...
-                enum:
-                - remote
-                - local
-                - virtual
-                type: string
             required:
-            - artifactRepoProvider
-            - packageType
+            - cluster
+            - envType
             - product
-            - repoName
-            - repoType
             type: object
           status:
-            description: ArtifactRepoStatus defines the observed state of ArtifactRepo
+            description: EnvironmentStatus defines the observed state of Environment
             type: object
         type: object
     served: true

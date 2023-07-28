@@ -9,3 +9,15 @@ spec:
       containers:
       - name: manager
         image: controller:latest
+        volumeMounts:
+        - name: nautes-configs
+          mountPath: /opt/nautes/configs/
+        - name: nautes-tls-certs
+          mountPath: /opt/nautes/ssl/
+      volumes:
+      - name: nautes-configs
+        configMap:
+          name: nautes-configs
+      - name: nautes-tls-certs
+        configMap:
+          name: nautes-tls-certs

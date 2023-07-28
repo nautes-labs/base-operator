@@ -3,7 +3,7 @@ apiVersion: apiextensions.k8s.io/v1
 kind: CustomResourceDefinition
 metadata:
   annotations:
-    controller-gen.kubebuilder.io/version: v0.8.0
+    controller-gen.kubebuilder.io/version: v0.11.3
   creationTimestamp: null
   name: coderepoes.nautes.resource.nautes.io
 spec:
@@ -15,7 +15,23 @@ spec:
     singular: coderepo
   scope: Namespaced
   versions:
-  - name: v1alpha1
+  - additionalPrinterColumns:
+    - jsonPath: .spec.codeRepoProvider
+      name: PROVIDER
+      type: string
+    - jsonPath: .spec.product
+      name: PRODUCTRESOURCENAME
+      type: string
+    - jsonPath: .spec.project
+      name: PROJECT
+      type: string
+    - jsonPath: .spec.repoName
+      name: REPONAME
+      type: string
+    - jsonPath: .spec.url
+      name: URL
+      type: string
+    name: v1alpha1
     schema:
       openAPIV3Schema:
         description: CodeRepo is the Schema for the coderepoes API
@@ -43,21 +59,21 @@ spec:
                 type: boolean
               product:
                 type: string
+              project:
+                type: string
               repoName:
                 type: string
               url:
                 type: string
               webhook:
+                nullable: true
                 properties:
                   events:
                     items:
                       type: string
                     type: array
-                  isolation:
-                    type: string
                 required:
                 - events
-                - isolation
                 type: object
             type: object
           status:
@@ -68,8 +84,8 @@ spec:
                   description: "Condition contains details for one aspect of the current
                     state of this API Resource. --- This struct is intended for direct
                     use as an array at the field path .status.conditions.  For example,
-                    type FooStatus struct{ // Represents the observations of a foo's
-                    current state. // Known .status.conditions.type are: \"Available\",
+                    \n type FooStatus struct{ // Represents the observations of a
+                    foo's current state. // Known .status.conditions.type are: \"Available\",
                     \"Progressing\", and \"Degraded\" // +patchMergeKey=type // +patchStrategy=merge
                     // +listType=map // +listMapKey=type Conditions []metav1.Condition
                     `json:\"conditions,omitempty\" patchStrategy:\"merge\" patchMergeKey:\"type\"
@@ -154,9 +170,3 @@ spec:
     storage: true
     subresources:
       status: {}
-status:
-  acceptedNames:
-    kind: ""
-    plural: ""
-  conditions: []
-  storedVersions: []

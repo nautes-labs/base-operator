@@ -35,6 +35,7 @@ patchesStrategicMerge:
 - manager_image_patch.yaml
 - manager_tls_patch.yaml
 - manager_log_persistence_patch.yaml
+- manager_args_patch.yaml
 
 # Mount the controller config file for loading manager configurations
 # through a ComponentConfig type
